@@ -1,8 +1,8 @@
 # BitCaffein
 ## Empowering creators with decentralized donations on Ethereum.
-## BitCaffein is a decentralized platform inspired by buymeacoffee.com, built on the Ethereum blockchain. It enables creators to receive ETH donations transparently and securely, leveraging blockchain technology for privacy and efficiency.
+BitCaffein is a decentralized platform inspired by buymeacoffee.com, built on the Ethereum blockchain. It enables creators to receive ETH donations transparently and securely, leveraging blockchain technology for privacy and efficiency.
 
-# <b> Functionalities: </b>
+ <b> Functionalities: </b>
 
 ## 1. Create Campaigns
 Creators can easily launch fundraising campaigns by specifying a title, description, and fundraising goal.
