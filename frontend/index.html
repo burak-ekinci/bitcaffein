@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BitCaffein</title>
+
+    <style>
+      html,
+      #root {
+        background-color: #fff8f3;
+      }
+      .content {
+        text-align: center;
+        padding: 100px;
+      }
+      .powered-by {
+        color: #6fc3c0;
+      }
+      .bitcaffein {
+        color: #b18871;
+        font-style: italic;
+        font-family: "Dancing Script", cursive;
+        font-optical-sizing: auto;
+        font-weight: 100;
+        font-size: 5rem;
+      }
+      .btn-custom {
+        background-color: #ff684b;
+        font-size: 18px;
+
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        transition: 0.3s ease-out;
+      }
+      .btn-custom:hover {
+        background-color: #ff5335;
+        box-shadow: 10px 10px #fe9b88;
+        border-radius: 0px 30px;
+      }
+      .highlight {
+        color: white;
+        font-weight: 100;
+        font-style: italic;
+      }
+
+      body {
+        background-color: #fff8f3;
+        font-family: sans-serif;
+      }
+
+      .content {
+        text-align: center;
+        padding: 100px;
+        opacity: 0; /* Başlangıçta görünmez */
+        transform: translateY(50px); /* Y aşağıya çekilmiştir */
+      }
+
+      .powered-by {
+        color: #6fc3c0;
+      }
+
+      .bitcaffein {
+        color: #b18871;
+        font-weight: bold;
+        font-style: italic;
+      }
+
+      .btn-custom {
+        background-color: #ff684b;
+        color: white;
+        font-size: 18px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+      }
+
+      .btn-custom:hover {
+        background-color: #ff5335;
+      }
+
+      .highlight {
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

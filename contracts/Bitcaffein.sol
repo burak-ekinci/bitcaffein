@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.19;
+pragma solidity >0.8.0 <0.9.0;
 
 contract BitCaffein {
-    address private owner;
+    address public owner;
 
     constructor() {
         owner = msg.sender;
@@ -11,6 +11,8 @@ contract BitCaffein {
     struct Campaign {
         uint id;
         address creator;
+        string creatorName;
+        string creatorJob;
         string title;
         string description;
         uint totalAmount;
@@ -48,30 +50,36 @@ contract BitCaffein {
 
     // Modifiers
     modifier onlyOwner() {
-        require(
-            owner == msg.sender,
-            Unauthorized(msg.sender, "Only owner can access this side")
-        );
+        require(owner == msg.sender, "Only owner can access this side");
         _;
     }
 
     modifier minAmount(uint campaignId, uint amount) {
-        require(
-            amount > 100000000000000,
-            InsufficientDonation(campaignId, "Min donate amount is 0.0001 eth")
-        );
+        require(amount > 100000000000000, "Min donate amount is 0.0001 eth");
         _;
+    }
+
+    function getOwner() public view returns (address) {
+        return owner;
+    }
+
+    function test() public pure returns (string memory) {
+        return "hello Burak";
     }
 
     function createCampaign(
         string memory title,
         string memory description,
+        string memory creatorName,
+        string memory creatorJob,
         uint goalAmount
     ) public {
         campaignCounter++;
         campaigns[campaignCounter] = Campaign({
             id: campaignCounter,
             creator: msg.sender,
+            creatorName: creatorName,
+            creatorJob: creatorJob,
             title: title,
             description: description,
             totalAmount: 0,
@@ -89,7 +97,8 @@ contract BitCaffein {
     function getMyCampaigns(address user) public view returns (uint[] memory) {
         return myCampaigns[user];
     }
-    function donate(uint campaignId) public payable {
+
+    function donation(uint campaignId) public payable {
         Campaign storage campaign = campaigns[campaignId];
         if (campaign.id == 0) revert CampaignNotFound(campaignId);
 

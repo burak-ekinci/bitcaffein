@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+ID:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Playwrite+ID:wght@100..400&display=swap');
+
+ p, h2, span {
+  font-family: "Comfortaa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.logo {
+  font-family: "Playwrite ID", cursive;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.bg {
+  background-color: #F8F4E1;
+  color: #74512D;
+  border: 4px solid #543310 ;
+  border-left: 0px;
+  border-right: 0px;
+  border-radius: 15px;
+}
+
+.button{
+  font-family: "Comfortaa", sans-serif;
+  background-image: linear-gradient(to right, #543310,#AF8F6F);
+  color:#F8F4E1;
+  /* border: #543310 solid; */
+  border-radius: 10px ;
+  text-decoration: none;
+  transition: all 0.3s;
+  padding: 8px;
+  
+}
+.button:hover{
+  box-shadow: 0 0 15px #543310;
+  text-decoration: none;
+  color:#F8F4E1
+}
+
+.navbar {
+  background-color: #F8F4E1;
+}
+.navbar-brand {
+  display: flex;
+
+}
+.profile-section {
+  display: flex;
+}
+.profile-section img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.content {
+  margin-top: 20px;
+}
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.img-button {
+  position: relative;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.img-button img {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.img-button img:hover {
+  transform: rotate(-20deg);
+}
+
+.img-button .overlay {
+  font-family: "Comfortaa", sans-serif;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #F8F4E1;
+  font-size: 24px;
+  font-weight: bold;
+  pointer-events: none;
+}

@@ -1,14 +1,12 @@
-import { HardhatUserConfig } from "hardhat/types";
-import "@nomiclabs/hardhat-waffle";
-import "dotenv/config";
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.4",
+  solidity: "0.8.20",
   networks: {
-    ropsten: {
-      url: process.env.ALCHEMY_API_URL,
-      accounts: [`0x${process.env.PRIVATE_KEY}`],
-    },
+    hardhat: { chainId: 1337 },
+    localhost: {},
+    ganache: { url: "http://127.0.0.1:7545" },
   },
 };
 
