@@ -2,7 +2,7 @@
   "name": "frontend",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@gsap/react": "^2.1.1",
     "@metamask/providers": "^17.1.2",
+    "@openzeppelin/contracts": "^5.1.0",
     "@popperjs/core": "^2.11.8",
     "dotenv": "^16.4.5",
     "ethers": "^6.13.2",

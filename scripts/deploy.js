@@ -43,7 +43,5 @@ main().catch((error) => {
     process.exitCode = 1;
 })
 
-// npx hardhat run scripts/deploy.js --network localhost
-
-
+// // npx hardhat run scripts/deploy.js --network localhost
 

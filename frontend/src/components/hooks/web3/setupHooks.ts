@@ -1,10 +1,11 @@
-import { defineProperties } from "ethers";
-import { CryptoHookFactory, Web3Dependencies } from "../../types/web3/hooks";
+import { Web3Dependencies } from "../../types/web3/hooks";
 import { hookFactory as createAccountHook, UseAccountHook } from "./useAccount";
+import { hookFactory as createNetworkHook, UseNetworkHook } from "./useNetwork";
 
 // initial veya new type tanımlarken hangi fonksiyonların olduğunu ve ne tipte olduğunu gösterir
 export type Web3Hooks = {
   useAccount: UseAccountHook;
+  useNetwork: UseNetworkHook;
 };
 
 export type SetupHooks = {
@@ -15,5 +16,6 @@ export type SetupHooks = {
 export const setupHooks: SetupHooks = (deps) => {
   return {
     useAccount: createAccountHook(deps),
+    useNetwork: createNetworkHook(deps),
   };
 };

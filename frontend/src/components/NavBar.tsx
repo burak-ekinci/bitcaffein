@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useHooks, useWeb3 } from "../components/providers/web3";
-import { useAccount } from "./hooks/web3";
+import { useAccount, useNetwork } from "./hooks/web3";
 import WalletBar from "./WalletBar";
 interface Props {
   account: String;
@@ -9,6 +9,7 @@ interface Props {
 const NavBar = () => {
   // const { ethereum, provider, contract, isLoading } = useWeb3();
   const { account } = useAccount();
+  const { network } = useNetwork();
 
   return (
     <nav className="navbar navbar-expand-lg px-3">
@@ -48,14 +49,30 @@ const NavBar = () => {
             <i className="bi bi-search"></i>
           </button>
         </form>
-
         {/* ******************  CONNECT WALLET ***************/}
-        <WalletBar
-          isInstalled={account.isInstalled}
-          isLoading={account.isLoading}
-          connect={account.connect}
-          account={account.data}
-        />
+        <div className="d-flex align-items-center">
+          {account.data !== "Cannot retrieve account! Please connect wallet." &&
+          account.isInstalled ? (
+            <div className="text-end d-flex flex-column">
+              <div>
+                <span className="">
+                  {account.data?.slice(0, 5) + "..." + account.data?.slice(-4)}
+                </span>
+              </div>
+              <div>
+                <span>{network?.data}</span>
+              </div>
+            </div>
+          ) : null}
+
+          <WalletBar
+            isInstalled={account.isInstalled}
+            isLoading={account.isLoading}
+            connect={account.connect}
+            account={account.data}
+            network={network.data}
+          />
+        </div>
         {/* ******************* */}
       </div>
     </nav>

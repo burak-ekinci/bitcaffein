@@ -17,9 +17,6 @@ async function main () {
 }
 
 
-
-
-
 async function saveContractFiles (contract) {
     const contractDir = path.join(__dirname, "..", "frontend", "public", "contracts"
     )
@@ -34,7 +31,7 @@ async function saveContractFiles (contract) {
         JSON.stringify({ "BitCaffeinNFT" : contract.target}, null, 2)
     )
 
-    const BitCaffeinNFTArtifact = await artifacts.readArtifactSync("BitCaffein")
+    const BitCaffeinNFTArtifact = await artifacts.readArtifactSync("BitCaffeinNFT")
 
     fs.writeFileSync(
         path.join(contractDir, "BitCaffeinNFT.json"),

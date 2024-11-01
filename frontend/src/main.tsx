@@ -54,6 +54,10 @@ const router = createBrowserRouter([
     element: <ConnectWallet />,
   },
   {
+    path: "/giris",
+    element: <WalletNotDetected />,
+  },
+  {
     path: "/",
     element: <BaseLayout />,
   },
