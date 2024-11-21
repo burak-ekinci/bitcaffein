@@ -4,7 +4,7 @@ const Project = () => {
       <div className="container col-md-9 mt-3">
         <div className="bg row mb-3 p-3 d-flex justify-content-center align-items-center">
           <div className="col-md-6 d-flex align-items-center">
-            <img src="./cfe.png" width={40} alt="img" />
+            <img src="./pp.png" width={40} alt="img" />
             <h1>BitCaffein</h1>
           </div>
           <div className="col-md-6 text-right">

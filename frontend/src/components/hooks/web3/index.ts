@@ -15,3 +15,11 @@ export const useNetwork = () => {
     network: swrRes,
   };
 };
+
+export const useContract = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useContract();
+  return {
+    contract: swrRes,
+  };
+};

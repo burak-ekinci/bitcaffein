@@ -2,7 +2,6 @@ import { MetaMaskInpageProvider } from "@metamask/providers";
 import { ethers, Contract } from "ethers";
 import { setupHooks, Web3Hooks } from "../../hooks/web3/setupHooks";
 import { Web3Dependencies } from "../../types/web3/hooks";
-import { isElementOfType } from "react-dom/test-utils";
 
 declare global {
   interface Window {

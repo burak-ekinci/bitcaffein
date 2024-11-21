@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+ID:wght@100..400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Playwrite+ID:wght@100..400&display=swap');
 
- p, h2, span {
+ /* p, h2, span {
   font-family: "Comfortaa", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
@@ -33,7 +33,7 @@
   font-family: "Comfortaa", sans-serif;
   background-image: linear-gradient(to right, #543310,#AF8F6F);
   color:#F8F4E1;
-  /* border: #543310 solid; */
+  border: #543310 solid;
   border-radius: 10px ;
   text-decoration: none;
   transition: all 0.3s;
@@ -103,4 +103,122 @@
   font-size: 24px;
   font-weight: bold;
   pointer-events: none;
+} */
+  *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; font-family: "Comfortaa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
+
+ body{
+    /* background-image: url("./bg.jpg"); 
+    background-size: cover; */
+    background-color: #cafafe;
+  }
+
+
+ /* Navbar Styling */
+ .navbar {
+  margin: 10px auto;
+  border-radius: 15px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  max-width: 1300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: "Playwrite ID", cursive;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+
+/* Hero Section */
+/* .hero-section {
+  height: 100vh;
+  background: url('https://source.unsplash.com/1600x900/?coffee') center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 0 10px 10px #16423C;
+  } */
+  
+  .hero-section {
+    margin: 1rem;
+    min-height: 90vh;
+  }
+  
+  /* MOBILE SCREEN */
+  @media screen and (max-width: 768px){
+    #mt{
+      margin-top: 7px;
+      margin-bottom: 7px;
+    }
+  }
+
+  /* MID SCREEN */
+  @media screen and (max-width: 992px){
+    .hero-section {
+      margin: 1rem;
+      min-height: 70vh;
+    }
+    #mt{
+      margin-top: 7px;
+      margin-bottom: 7px;
+    }
+    #home{
+      margin-top: 50px ;
+      
+    }
+  }
+  
+  .hero-section h1 {
+    color: #2c3e50;
+  }
+  
+  .hero-section img {
+    max-width: 100%; /* Resmi responsive yapar */
+    height: auto;
+    object-fit: cover; /* Resmin düzgün görünmesini sağlar  d5f3b6*/
+  } 
+  
+  
+  /* Card Styling */
+  .card {
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .link{
+    text-decoration: none;
+    color: black;
+    transition: all .4s;
+  }
+
+
+
+  
+#connectwallet{
+  background-color: #f8671f;
+  color: #ffff;
+}
+
+ 
+  /* Footer */
+  .footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 50px;
+    border-radius: 15px 15px 0 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;  
+    position: fixed;
+  }
+
+

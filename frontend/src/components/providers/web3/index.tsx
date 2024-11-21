@@ -15,6 +15,9 @@ import {
   Web3State,
 } from "./utils";
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import { ContractRunner } from "ethers";
+import { Signer } from "ethers";
+import { Contract } from "ethers";
 
 interface Web3ProviderProps {
   children: ReactNode;
@@ -49,13 +52,16 @@ const Web3Provider: FunctionComponent<Web3ProviderProps> = ({ children }) => {
   useEffect(() => {
     async function initWeb3() {
       try {
-        const provider = new ethers.BrowserProvider(window.ethereum);
+        const provider = new ethers.BrowserProvider(window.ethereum as any);
         const contract = await loadContract("BitCaffein", provider);
+
+        const signer = await provider.getSigner();
+        const signedContract = contract.connect(signer);
         setWeb3api(
           createWeb3State({
             ethereum: window.ethereum,
             provider,
-            contract,
+            contract: signedContract as Contract,
             isLoading: false,
           })
         );

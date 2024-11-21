@@ -30,6 +30,10 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { EaselPlugin } from "gsap/EaselPlugin";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { TextPlugin } from "gsap/TextPlugin";
+import Home from "./components/Home.tsx";
+import Profile from "./components/Profile.tsx";
+import BuyCoffee from "./components/BuyCoffee.tsx";
+import AddCampaign from "./components/AddCampaign.tsx";
 
 gsap.registerPlugin(
   useGSAP,
@@ -59,7 +63,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <BaseLayout />,
+    element: <BaseLayout children={<Home />} />,
+  },
+  {
+    path: "/buycoffee",
+    element: <BaseLayout children={<BuyCoffee />} />,
+  },
+  {
+    path: "/profile/:id",
+    element: <BaseLayout children={<Profile />} />,
+  },
+  {
+    path: "/addcampaign",
+    element: <BaseLayout children={<AddCampaign />} />,
+  },
+  {
+    path: "/mycampaigns",
+    element: <BaseLayout children={<AddCampaign />} />,
   },
 ]);
 
