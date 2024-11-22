@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     element: <BaseLayout children={<BuyCoffee />} />,
   },
   {
-    path: "/profile/:id",
+    path: "/campaign/:id",
     element: <BaseLayout children={<Profile />} />,
   },
   {

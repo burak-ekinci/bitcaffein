@@ -40,18 +40,30 @@ export const hookFactory: AccountHookFactory =
     const handleAccountsChanged = (...args: unknown[]) => {
       const accounts = args[0] as string[];
       if (accounts.length === 0) {
-        console.error("Please, connect to metamask");
-      }
-      // Buradaki accounts[0] değeri yeni geçtiğim mm hesabı swrRes.data ise önceki hesap oluyor
-      else if (accounts[0] !== data) {
-        mutate(accounts[0]);
+        console.log("Wallet disconnected.");
+      } else {
+        console.log("Account changed:", accounts[0]);
+        mutate(accounts[0]); // Yeni hesabı bağla
       }
     };
     const connect = async () => {
+      const { ethereum } = window as any; // Ethereum nesnesini alın
+      if (!ethereum) {
+        console.error("Ethereum provider not found. Please install MetaMask.");
+        return;
+      }
+
       try {
-        ethereum?.request({ method: "eth_requestAccounts" });
-      } catch (e) {
-        console.error(e);
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        console.log("Connected account:", accounts[0]);
+      } catch (error) {
+        if (typeof error === "object" && error !== null && "message" in error) {
+          console.error("Error:", (error as { message: string }).message);
+        } else {
+          console.error("An unknown error occurred.");
+        }
       }
     };
 
@@ -59,7 +71,9 @@ export const hookFactory: AccountHookFactory =
       ...swr,
       data,
       isLoading: isLoading as boolean,
-      isInstalled: ethereum?.isMetaMask || false,
+      isInstalled:
+        typeof window.ethereum !== "undefined" &&
+        typeof window.ethereum.request === "function",
       isValidating,
       mutate,
       connect,
