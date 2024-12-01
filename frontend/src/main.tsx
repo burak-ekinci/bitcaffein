@@ -6,13 +6,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { ToastContainer } from "react-toastify";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ConnectWallet from "./components/ConnectWallet.tsx";
+import ConnectWallet from "./components/ui/ConnectWallet.js";
 import "./index.css";
-import Card from "./components/Card.tsx";
-import NavBar from "./components/NavBar.tsx";
+import Card from "./components/ui/Card.js";
 import BaseLayout from "./layouts/BaseLayout.tsx";
-import Project from "./components/Project.tsx";
-import WalletNotDetected from "./components/WalletNotDetected.tsx";
+import WalletNotDetected from "./components/ui/WalletNotDetected.js";
 import { Web3Provider } from "./components/providers/index.ts";
 
 import { gsap } from "gsap";
@@ -30,10 +28,12 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { EaselPlugin } from "gsap/EaselPlugin";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { TextPlugin } from "gsap/TextPlugin";
-import Home from "./components/Home.tsx";
-import Profile from "./components/Profile.tsx";
-import BuyCoffee from "./components/BuyCoffee.tsx";
-import AddCampaign from "./components/AddCampaign.tsx";
+import Home from "./components/ui/Home.js";
+import Profile from "./components/ui/Campaign.js";
+import AddCampaign from "./components/ui/AddCampaign.js";
+import GetCampaign from "./components/ui/getCampaign.js";
+import Campaign from "./components/ui/Campaign.js";
+import MyCampaign from "./components/ui/MyCampaign.js";
 
 gsap.registerPlugin(
   useGSAP,
@@ -63,23 +63,51 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <BaseLayout children={<Home />} />,
+    element: <BaseLayout bgColor={""} children={<Home />} />,
   },
   {
     path: "/buycoffee",
-    element: <BaseLayout children={<BuyCoffee />} />,
+    element: (
+      <BaseLayout
+        bgColor={""}
+        children={<GetCampaign functionType="getAllCampaigns" />}
+      />
+    ),
   },
   {
     path: "/campaign/:id",
-    element: <BaseLayout children={<Profile />} />,
+    element: <BaseLayout bgColor={""} children={<Campaign />} />,
   },
   {
     path: "/addcampaign",
-    element: <BaseLayout children={<AddCampaign />} />,
+    element: <BaseLayout bgColor={""} children={<AddCampaign />} />,
   },
   {
     path: "/mycampaigns",
-    element: <BaseLayout children={<AddCampaign />} />,
+    children: [
+      {
+        path: "",
+        element: (
+          <BaseLayout
+            bgColor={""}
+            children={<GetCampaign functionType="getMyCampaigns" />}
+          />
+        ),
+      },
+      {
+        path: "campaign",
+        element: (
+          <BaseLayout
+            bgColor={""}
+            children={<GetCampaign functionType="getMyCampaigns" />}
+          />
+        ),
+      },
+      {
+        path: "campaign/:id",
+        element: <BaseLayout bgColor={""} children={<MyCampaign />} />,
+      },
+    ],
   },
 ]);
 

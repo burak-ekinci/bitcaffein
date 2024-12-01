@@ -63,6 +63,7 @@ const Web3Provider: FunctionComponent<Web3ProviderProps> = ({ children }) => {
             provider,
             contract: signedContract as Contract,
             isLoading: false,
+            setWeb3api,
           })
         );
         setGlobalListeners(window.ethereum);

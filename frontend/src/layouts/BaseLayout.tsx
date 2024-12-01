@@ -5,19 +5,17 @@ import {
   useRef,
   useState,
 } from "react";
-import Card from "../components/Card";
-import NavBar from "../components/NavBar";
-import Project from "../components/Project";
-import { Contract } from "ethers";
-import { useHooks, useWeb3 } from "../components/providers/web3";
+import NavBar from "../components/ui/NavBar";
+import { useWeb3 } from "../components/providers/web3";
 import { useAccount } from "../components/hooks/web3";
-import Footer from "../components/Footer";
+import Footer from "../components/ui/Footer";
 
 interface Props {
   children: ReactNode;
+  bgColor: string | null | "";
 }
 
-const BaseLayout = ({ children }: Props) => {
+const BaseLayout = ({ children, bgColor = "" }: Props) => {
   const { ethereum, provider, contract, isLoading } = useWeb3();
 
   const getAccounts = async () => {
@@ -28,24 +26,16 @@ const BaseLayout = ({ children }: Props) => {
     console.log(await contract);
   };
   // getName();
-  const { account } = useAccount();
 
   return (
     <>
-      <NavBar />
-      <div className="">{children}</div>
-      {/* <Footer /> */}
+      <div id="" className={`${bgColor}`}>
+        <NavBar />
+        {children}
+        {/* <Footer /> */}
+      </div>
     </>
   );
 };
 
 export default BaseLayout;
-
-{
-  /* <div className="container">
-  -
-  {`isLoading :  ${isLoading} -- ethereum: ${ethereum} -- ** provider : ${JSON.stringify(
-    provider
-  )}`}
-</div> */
-}

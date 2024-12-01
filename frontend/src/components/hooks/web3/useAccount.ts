@@ -1,7 +1,10 @@
 import useSWR from "swr";
 import { CryptoHookFactory } from "../../types/web3/hooks";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { loadContract } from "../../providers/web3/utils";
+import { ethers } from "ethers";
+import { useWeb3 } from "../../providers/web3";
 
 type UseAccountResponse = {
   connect: () => void;
@@ -15,8 +18,10 @@ export type UseAccountHook = ReturnType<AccountHookFactory>;
 
 //  -> deps = { ethereum , provider...}
 export const hookFactory: AccountHookFactory =
-  ({ provider, ethereum, isLoading }) =>
+  ({ provider, ethereum, isLoading, setWeb3api }) =>
   () => {
+    const { contract } = useWeb3();
+
     const { data, mutate, isValidating, ...swr } = useSWR(
       provider ? "web3/useAccount" : null,
       async () => {
@@ -46,24 +51,70 @@ export const hookFactory: AccountHookFactory =
         mutate(accounts[0]); // Yeni hesabı bağla
       }
     };
-    const connect = async () => {
-      const { ethereum } = window as any; // Ethereum nesnesini alın
+
+    // Cüzdan Bağlantısı
+    const connectWallet = async (): Promise<
+      { provider: ethers.BrowserProvider; account: string } | undefined
+    > => {
+      const { ethereum } = window as any; // Tarayıcı ortamından Ethereum nesnesi alınır.
+
       if (!ethereum) {
         console.error("Ethereum provider not found. Please install MetaMask.");
         return;
       }
 
       try {
-        const accounts = await ethereum.request({
+        // Kullanıcıdan cüzdan bağlama izni alınır
+        const accounts: string[] = await ethereum.request({
           method: "eth_requestAccounts",
         });
-        console.log("Connected account:", accounts[0]);
-      } catch (error) {
-        if (typeof error === "object" && error !== null && "message" in error) {
-          console.error("Error:", (error as { message: string }).message);
-        } else {
-          console.error("An unknown error occurred.");
+
+        if (accounts.length === 0) {
+          console.warn(
+            "No account found. Please connect at least one account."
+          );
+          return;
         }
+
+        const provider = new ethers.BrowserProvider(ethereum);
+        console.log("Connected account:", accounts[0]);
+
+        return { provider, account: accounts[0] };
+      } catch (error) {
+        console.error("Error connecting wallet:", error);
+      }
+    };
+
+    // Contract Bağlantısı
+    const connect = async (): Promise<
+      { signedContract: ethers.Contract; account: string } | undefined
+    > => {
+      try {
+        const walletConnection = await connectWallet();
+
+        if (!walletConnection) {
+          console.error("Wallet connection failed.");
+          return;
+        }
+
+        const { provider, account } = walletConnection;
+
+        // Contract yüklenir
+        const contract = await loadContract("BitCaffein", provider);
+        console.log("contract", contract);
+        // Signer oluşturulur ve contract bağlanır
+        const signer = await provider.getSigner();
+        const signedContract = contract.connect(signer);
+        setWeb3api((prevState: any) => ({
+          ...prevState,
+          contract: signedContract, // Yeni signed contract
+        }));
+        console.log(signer);
+        console.log("Wallet Connected:", account);
+        console.log("Contract Initialized:", signedContract);
+        3;
+      } catch (error) {
+        console.error("Error connecting contract:", error);
       }
     };
 

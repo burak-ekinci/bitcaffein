@@ -25,6 +25,7 @@ export const createDefaultState = () => {
     contract: null,
     isLoading: true,
     hooks: setupHooks({ isLoading: true } as any),
+    setWeb3api: null,
   };
 };
 
@@ -33,13 +34,15 @@ export const createWeb3State = ({
   provider,
   contract,
   isLoading,
+  setWeb3api,
 }: Web3Dependencies) => {
   return {
     ethereum,
     provider,
     contract,
     isLoading: false,
-    hooks: setupHooks({ ethereum, provider, contract, isLoading }),
+    hooks: setupHooks({ ethereum, provider, contract, isLoading, setWeb3api }),
+    setWeb3api,
   };
 };
 

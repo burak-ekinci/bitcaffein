@@ -7,6 +7,7 @@ export type Web3Dependencies = {
   provider: ethers.BrowserProvider;
   contract: Contract;
   isLoading: boolean;
+  setWeb3api: any;
 };
 export type CryptoHookFactory<D = any, R = any, P = any> = {
   (d: Partial<Web3Dependencies>): CryptoHandlerHook<D, R, P>;

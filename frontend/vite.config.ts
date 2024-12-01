@@ -15,5 +15,8 @@ export default defineConfig({
     "process.env.VITE_KEY_TARGET_NETWORK_ID": JSON.stringify(
       process.env.VITE_KEY_TARGET_NETWORK_ID
     ),
+    "process.env.VITE_KEY_API_CONNECTION_STRING": JSON.stringify(
+      process.env.VITE_KEY_TARGET_NETWORK_ID
+    ),
   },
 });

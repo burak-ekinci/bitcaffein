@@ -12,6 +12,9 @@ type UseContractResponse = {
     goalAmount: string
   ) => Promise<void>;
   getMyCampaigns: (user: string) => Promise<any[]>;
+  getCampaignById: (id: string) => Promise<any>;
+  deleteCampaign: (id: bigint) => Promise<void>;
+  withdrawDonations: (campaignId: number) => Promise<void>;
   donation: (campaignId: number, amount: string) => Promise<void>;
   getAllCampaigns: () => Promise<any[]>;
   test: () => Promise<string>;
@@ -24,8 +27,6 @@ export type UseContractHook = ReturnType<ContractHookFactory>;
 export const hookFactory: ContractHookFactory =
   ({ provider, contract }) =>
   () => {
-    const [activeContract, setContract] = useState<Contract | null>(null);
-
     const { data, mutate, isValidating, ...swr } = useSWR(
       provider ? "web3/useContract" : null,
       async () => {
@@ -33,7 +34,6 @@ export const hookFactory: ContractHookFactory =
         if (!contract) {
           throw new Error("Cannot retrieve contract! Please connect wallet.");
         }
-        setContract(contract);
         return contract;
       },
       { revalidateOnFocus: false }
@@ -53,14 +53,25 @@ export const hookFactory: ContractHookFactory =
         description,
         creatorName,
         creatorJob,
-        ethers.parseEther(goalAmount)
+        goalAmount
       );
       await tx.wait();
     };
-
+    const getAllCampaigns = async () => {
+      if (!contract) throw new Error("Contract is not initialized.");
+      const campaigns = await contract!.getAllCampaigns();
+      return campaigns;
+    };
     const getMyCampaigns = async (user: string) => {
       if (!contract) throw new Error("Contract is not initialized.");
+      // Get the campaigns of user
       const campaigns = await contract.getMyCampaigns(user);
+      return campaigns;
+    };
+
+    const getCampaignById = async (id: string) => {
+      if (!contract) throw new Error("Contract is not initialized.");
+      const campaigns = await contract.getCampaignById(id);
       return campaigns;
     };
 
@@ -72,12 +83,56 @@ export const hookFactory: ContractHookFactory =
       await tx.wait();
     };
 
-    const getAllCampaigns = async () => {
-      if (!activeContract) throw new Error("Contract is not initialized.");
-      const campaigns = await activeContract!.getAllCampaigns();
-      return campaigns;
+    const deleteCampaign = async (campaignId: bigint): Promise<void> => {
+      if (!contract) {
+        throw new Error("Contract not initialized");
+      }
+
+      try {
+        const tx = await contract.deleteCampaign(campaignId);
+        await tx.wait();
+        console.log("Campaign deleted successfully");
+      } catch (error: any) {
+        console.error("Error deleting campaign:", error.message);
+        throw new Error(error.message || "Failed to delete campaign.");
+      }
     };
 
+    const withdrawDonations = async (campaignId: number): Promise<void> => {
+      if (!contract) {
+        throw new Error("Contract not initialized");
+      }
+
+      try {
+        const tx = await contract.withdrawDonations(campaignId);
+        await tx.wait();
+        console.log("Donations withdrawn successfully");
+      } catch (error: any) {
+        console.error("Error withdrawing donations:", error);
+        throw new Error(error.message || "Failed to withdraw donations.");
+      }
+    };
+
+    const updateCampaign = async (
+      campaignId: number,
+      newTitle: string,
+      newDescription: string
+    ) => {
+      if (!contract) throw new Error("Contract is not initialized!");
+
+      try {
+        const tx = await contract!.updateCampaign(
+          campaignId,
+          newTitle,
+          newDescription
+        );
+        await tx.wait();
+        console.log("Campaign updated successfully!");
+      } catch (error: any) {
+        console.error("Cannot update the campaign : ", error.message);
+        throw new Error(error || "Cannot update the campaign");
+      }
+    };
     const test = async () => {
       if (!contract) throw new Error("Contract is not initialized!");
       const testMessage = await contract.test();
@@ -91,8 +146,11 @@ export const hookFactory: ContractHookFactory =
       isValidating,
       createCampaign,
       getMyCampaigns,
-      donation,
       getAllCampaigns,
+      getCampaignById,
+      donation,
+      deleteCampaign,
+      withdrawDonations,
       test,
       isLoading: !data && !mutate && !isValidating,
     };

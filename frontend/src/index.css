@@ -1,109 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+ID:wght@100..400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Playwrite+ID:wght@100..400&display=swap');
 
- /* p, h2, span {
-  font-family: "Comfortaa", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-.logo {
-  font-family: "Playwrite ID", cursive;
-  font-optical-sizing: auto;
-  font-weight: 200;
-  font-style: normal;
-}
-
-.bg {
-  background-color: #F8F4E1;
-  color: #74512D;
-  border: 4px solid #543310 ;
-  border-left: 0px;
-  border-right: 0px;
-  border-radius: 15px;
-}
-
-.button{
-  font-family: "Comfortaa", sans-serif;
-  background-image: linear-gradient(to right, #543310,#AF8F6F);
-  color:#F8F4E1;
-  border: #543310 solid;
-  border-radius: 10px ;
-  text-decoration: none;
-  transition: all 0.3s;
-  padding: 8px;
-  
-}
-.button:hover{
-  box-shadow: 0 0 15px #543310;
-  text-decoration: none;
-  color:#F8F4E1
-}
-
-.navbar {
-  background-color: #F8F4E1;
-}
-.navbar-brand {
-  display: flex;
-
-}
-.profile-section {
-  display: flex;
-}
-.profile-section img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-left: 10px;
-}
-
-.content {
-  margin-top: 20px;
-}
-.card-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.img-button {
-  position: relative;
-  border: none;
-  background: none;
-  padding: 0;
-  margin: 0;
-  display: inline-block;
-}
-
-.img-button img {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.img-button img:hover {
-  transform: rotate(-20deg);
-}
-
-.img-button .overlay {
-  font-family: "Comfortaa", sans-serif;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #F8F4E1;
-  font-size: 24px;
-  font-weight: bold;
-  pointer-events: none;
-} */
   *{
   margin: 0;
   padding: 0;
@@ -113,21 +10,24 @@
   font-style: normal;
 }
 
- body{
-    /* background-image: url("./bg.jpg"); 
-    background-size: cover; */
-    background-color: #cafafe;
+body{
+  /* background-image: url("./bg.jpg"); 
+  background-size: cover; */ 
+  /* background-color: rgb(89, 168, 164) */
+  
+  background-color: rgb(0, 87, 61);
+ 
   }
 
 
  /* Navbar Styling */
  .navbar {
   margin: 10px auto;
-  border-radius: 15px;
+  border-radius: 50px;
   padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(113, 255, 220, 0.6);
   max-width: 1300px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgb(76, 244, 205);
   font-family: "Playwrite ID", cursive;
   font-optical-sizing: auto;
   font-weight: 200;
@@ -135,55 +35,107 @@
 }
 
 
+
 /* Hero Section */
-/* .hero-section {
-  height: 100vh;
-  background: url('https://source.unsplash.com/1600x900/?coffee') center/cover no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  text-shadow: 0 10px 10px #16423C;
+.hero-section {
+  color: #1cbf91;
+  min-height: 81vh;
+}
+
+.hero-section img {
+  margin-top: -100px;
+  max-width: 100%; 
+  height: auto;
+  object-fit: cover; 
+} 
+
+#mt1{
+  margin-top: 3vh;
+}
+
+.img-sm{
+  width: 20%;
+}
+
+/* .btcf-home{
+  width: 90%;
   } */
   
-  .hero-section {
-    margin: 1rem;
-    min-height: 90vh;
+  #bg{
+    background-color: rgba(113, 255, 220, 0.6);
   }
-  
+  #basebg{
+    background-color: rgb(0, 87, 61);
+ }
+
   /* MOBILE SCREEN */
   @media screen and (max-width: 768px){
-    #mt{
-      margin-top: 7px;
-      margin-bottom: 7px;
+    /* .btcf-home{
+      width: 100%;
+     } */
+      .hero-section {
+      margin-top: 5vh;
+      min-height: 87vh;
     }
+     #mt{
+       margin-top: 7px;
+       margin-bottom: 7px;
+      }
+      #mt1{
+        margin-top:0;
+      }
+      .img-sm{
+        width: 50%;
+      }
+    }
+    
+    /* 576-992 */
+    
+    /* MID SCREEN */
+    @media screen and (max-width: 992px){
+      /* .btcf-home{
+        width: 70%;
+        } */
+        /* .hero-section {
+          margin-top: 0vh;
+          min-height: 60vh;
+          } */
+          #mt{
+            margin-top: 7px;
+            margin-bottom: 7px;
+          }
+          #home{
+            margin-top: 10px ;  
+            
+          }
+          .hero-section img {
+            margin-top: -20px;
+            max-width: 100%; 
+            height: auto;
+            object-fit: cover; 
+    } 
   }
+    
 
-  /* MID SCREEN */
-  @media screen and (max-width: 992px){
-    .hero-section {
-      margin: 1rem;
-      min-height: 70vh;
-    }
-    #mt{
-      margin-top: 7px;
-      margin-bottom: 7px;
-    }
-    #home{
-      margin-top: 50px ;
-      
-    }
+  .background-video-container {
+    /* position: relative; */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   }
   
-  .hero-section h1 {
-    color: #2c3e50;
+  .background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -11;
   }
   
-  .hero-section img {
-    max-width: 100%; /* Resmi responsive yapar */
-    height: auto;
-    object-fit: cover; /* Resmin düzgün görünmesini sağlar  d5f3b6*/
-  } 
+  
   
   
   /* Card Styling */
@@ -195,7 +147,7 @@
 
   .link{
     text-decoration: none;
-    color: black;
+    /* color: rgb(203, 203, 203); */
     transition: all .4s;
   }
 
@@ -207,18 +159,132 @@
   color: #ffff;
 }
 
- 
-  /* Footer */
-  .footer {
-    background-color: #f8f9fa;
-    padding: 20px 0;
+
+/* Footer */
+.footer {
+    background-color: rgb(0, 87, 61);
+        padding: 20px 0;
     text-align: center;
-    margin-top: 50px;
     border-radius: 15px 15px 0 0;
     bottom: 0;
     left: 0;
     width: 100%;  
-    position: fixed;
+    position: relative;
+    color: #fff;
   }
 
+
+  #about{
+    background-color: rgb(0, 87, 61);
+    /* color: white */
+  }
+  
+  #features {
+    background-color:rgb(1, 48, 34);
+    box-shadow: 0px 20px 30px rgba(1, 48, 34, 1);
+
+  }
+  .feature-card h3{
+    font-weight: bold;
+  }
+  .feature-card {
+    height: 150px;
+    border-radius: 15px; /* Yuvarlatılmış köşeler */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* background-color:rgb(0, 87, 61); */
+    color: rgb(0, 87, 61);
+    background-color: white;
+   
+  }
+  
+  
+  .feature-card:hover {
+    color: white;
+    background-color: rgb(0, 87, 61);
+    transform: translateY(-5px); /* Hover'da yukarı kaldır */
+    box-shadow: 0 5px 20px 7px rgba(0, 255, 179,.7); /* Daha belirgin gölge */
+  }
+
+  
+  .video-section {
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+    width: 500px;
+    color: rgb(0, 255, 179);
+  }
+  
+  /* Progress Bar */
+.progress-bar {
+  background-color: #1cbf91 !important; /* Genel tonlara uyumlu */
+  transition: width 0.4s ease-in-out;
+}
+
+/* Buttons */
+.orange {
+  background-color: rgb(254, 177, 3);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  transition: transform 0.2s ease, background-color 0.3s;
+}
+
+.orange:hover {
+  background-color: #ffa200; /* Hover için daha koyu bir ton */
+  transform: scale(1.05);
+  transition: all .3s;
+}
+
+/* .btn-rounded {
+  background-color: #1cbf91;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.btn-rounded:hover {
+  background-color: #17a97c;
+  color: #fff;
+  transform: scale(1.1);
+} */
+
+/* Input Field */
+.form-control {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+
+  
+  /* .animated-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: upDown 5s ease-in-out infinite; /* Animasyon ayarları 
+  } */
+  
+  /* @ keyframes upDown { 
+     0% { */
+      /* top: 0;  
+     }
+    50% {
+      top: 30px; 
+    }
+    100% {
+      top: 0; 
+    }
+  } */
+   
 

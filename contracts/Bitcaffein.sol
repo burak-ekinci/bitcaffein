@@ -2,13 +2,15 @@
 pragma solidity >0.8.0 <0.9.0;
 
 contract BitCaffein {
+    // Owner of the contract
     address public owner;
-    
 
+    // Constructor
     constructor() {
         owner = msg.sender;
     }
 
+    // Structs
     struct Campaign {
         uint id;
         address creator;
@@ -20,18 +22,17 @@ contract BitCaffein {
         uint goalAmount;
         uint startTime;
     }
-    // Campaign counter variable
-    uint public campaignCounter = 0;
 
-    // All Campaigns
-    Campaign[] public _allCampaigns;
+    // State Variables
+    uint public campaignCounter = 0; // Tracks the number of campaigns created
+    Campaign[] public _allCampaigns; // Stores all campaigns
 
     // Mappings
-    mapping(uint => Campaign) public campaigns;
-    mapping(address => uint[]) public myCampaigns;
-    mapping(uint => address[]) public donors;
-    mapping(uint => mapping(address => uint)) public donorAmounts;
-    mapping(address => uint) public reputations;
+    mapping(uint => Campaign) public _campaigns; // Maps campaign ID to Campaign details
+    mapping(address => uint[]) public _myCampaigns; // Maps an address to its created campaigns
+    mapping(uint => address[]) public _donors; // Maps campaign ID to its donors
+    mapping(uint => mapping(address => uint)) public _donorAmounts; // Tracks donation amounts by donor per campaign
+    mapping(address => uint) public _reputations; // Stores reputation scores for users
 
     // Events
     event CampaignCreated(
@@ -48,6 +49,7 @@ contract BitCaffein {
     event DonationReceived(uint campaignId, address donor, uint amount);
     event ReputationUpdated(address user, uint newReputation);
     event DonationWithdrawn(uint campaignId, address donor, uint amount);
+    event CampaignDeleted(uint campaignId, address deletedBy);
 
     // Custom Errors
     error InsufficientDonation(uint campaignId, string text);
@@ -65,65 +67,86 @@ contract BitCaffein {
         _;
     }
 
-    // Getter Functions
+    // **Utility Functions**
+    /**
+     * @dev Returns the contract owner's address.
+     */
     function getOwner() public view returns (address) {
         return owner;
     }
 
+    /**
+     * @dev Test function for deployment verification.
+     */
     function test() public pure returns (string memory) {
         return "hello Burak";
     }
 
+    // **Getter Functions**
+    /**
+     * @dev Gets the donation amount for the sender in a specific campaign.
+     */
     function getDonorAmount(uint campaignId) public view returns (uint) {
-        return donorAmounts[campaignId][msg.sender];
+        return _donorAmounts[campaignId][msg.sender];
     }
 
-    // +
-    function getMyCampaign(address user) public view returns (uint[] memory) {
-        return myCampaigns[user];
+    /**
+     * @dev Retrieves campaign IDs created by a specific user.
+     */
+    function getCampaignByAddress(address user) public view returns (uint[] memory) {
+        return _myCampaigns[user];
     }
 
-    // +
-    function getMyCampaign(
-        uint campaignID
-    ) public view returns (Campaign memory) {
-        return campaigns[campaignID];
+    /**
+     * @dev Retrieves details of a specific campaign by ID.
+     */
+    function getCampaignById(uint campaignID) public view returns (Campaign memory) {
+        return _campaigns[campaignID];
     }
 
-    function getAllCampaigns() public view returns (Campaign[] memory) {
-    uint256 campaignNumber = _allCampaigns.length;
+    /**
+     * @dev Retrieves all campaigns created by a specific user.
+     */
+    function getMyCampaigns(address _address) public view returns (Campaign[] memory) {
+        uint256 campaignNumber = _allCampaigns.length;
+        Campaign[] memory cmpgns = new Campaign[](campaignNumber);
 
-    // Campaign dizisi için bellek alanı oluşturuyoruz.
-    Campaign[] memory cmpgns = new Campaign[](campaignNumber);
-
-    for (uint i = 0; i < campaignNumber; i++) {
-        // Storage'dan alınan her kampanyayı bellek alanına kopyalıyoruz.
-        Campaign storage campaign = _allCampaigns[i];
-        cmpgns[i] = campaign;
-    }
-
-    return cmpgns; // Doğru değişken ismi ile döndürülüyor.
-}
-
-function getMyCampaigns(address _address) public view returns (Campaign[] memory) {
-    uint256 campaignNumber = _allCampaigns.length;
-
-    // Campaign dizisi için bellek alanı oluşturuyoruz.
-    Campaign[] memory cmpgns = new Campaign[](campaignNumber);
-
-    for (uint i = 0; i < campaignNumber; i++) {
-        // Storage'dan alınan her kampanyayı bellek alanına kopyalıyoruz.
-        Campaign storage campaign = _allCampaigns[i];
-        if(campaign.creator == _address){
-        cmpgns[i] = campaign;
+        for (uint i = 0; i < campaignNumber; i++) {
+            Campaign storage campaign = _allCampaigns[i];
+            if (campaign.creator == _address) {
+                cmpgns[i] = campaign;
+            }
         }
+
+        return cmpgns;
     }
 
-    return cmpgns; // Doğru değişken ismi ile döndürülüyor.
-}
+     /**
+     * @dev Adds a campaign ID to the user's created campaigns list.
+     */
+    function addCampaignId(uint campaignId) private {
+        _myCampaigns[msg.sender].push(campaignId);
+    }
 
+    /**
+     * @dev Retrieves all campaigns.
+     */
+    function getAllCampaigns() public view returns (Campaign[] memory) {
+        uint256 campaignNumber = _allCampaigns.length;
+        Campaign[] memory cmpgns = new Campaign[](campaignNumber);
 
-    // +
+        for (uint i = 0; i < campaignNumber; i++) {
+            Campaign storage campaign = _allCampaigns[i];
+            cmpgns[i] = campaign;
+        }
+
+        return cmpgns;
+    }
+
+    // **Campaign Management Functions**
+    /**
+     * @dev Creates a new campaign with the provided details.
+     */
     function createCampaign(
         string memory title,
         string memory description,
@@ -143,74 +166,49 @@ function getMyCampaigns(address _address) public view returns (Campaign[] memory
             goalAmount: goalAmount,
             startTime: block.timestamp
         });
-    campaigns[campaignCounter] = newCampaign;
+
+        _campaigns[campaignCounter] = newCampaign;
         addCampaignId(campaignCounter);
         _allCampaigns.push(newCampaign);
+
         emit CampaignCreated(campaignCounter, msg.sender, title, goalAmount);
     }
 
-
+    /**
+     * @dev Deletes a campaign by its ID.
+     * Only the creator of the campaign or the contract owner can delete it.
+     */
     function deleteCampaign(uint campaignId) public {
-        
-    }
+        Campaign storage campaign = _campaigns[campaignId];
 
-    // +
-    function addCampaignId(uint campaignId) private {
-        myCampaigns[msg.sender].push(campaignId);
-    }
-    
-
-    
-
-    // +
-    function donation(uint campaignId) public payable {
-        Campaign storage campaign = campaigns[campaignId];
         if (campaign.id == 0) revert CampaignNotFound(campaignId);
+        if (campaign.creator != msg.sender && msg.sender != owner)
+            revert Unauthorized(msg.sender, "Not authorized to delete this campaign");
 
-        campaign.totalAmount += msg.value;
-        donors[campaignId].push(msg.sender);
-        donorAmounts[campaignId][msg.sender] += msg.value;
+        delete _campaigns[campaignId];
 
-        emit DonationReceived(campaignId, msg.sender, msg.value);
-    }
-    // +
-    function withdrawDonations(uint campaignId) public {
-        Campaign storage campaign = campaigns[campaignId];
+        // Remove campaign from global campaigns list
+        for (uint i = 0; i < _allCampaigns.length; i++) {
+            if (_allCampaigns[i].id == campaignId) {
+                _allCampaigns[i] = _allCampaigns[_allCampaigns.length - 1];
+                _allCampaigns.pop();
+                break;
+            }
+        }
 
-        // Kampanya mevcut mu?
-        if (campaign.id == 0) revert CampaignNotFound(campaignId);
-
-        // Çekim yapmaya çalışan kişinin kampanya sahibi olup olmadığı kontrolü
-        require(
-            campaign.creator == msg.sender,
-            "Only campaign owner can withdraw donations"
-        );
-
-        // Kampanyanın toplam bağış miktarını al
-        uint amount = campaign.totalAmount;
-
-        // Çekilebilecek minimum miktarın kontrolü
-        require(
-            amount >= 0.1 ether,
-            "The minimum amount that can be withdrawn is 0.1 ether"
-        );
-
-        // Kampanyanın toplam bağış miktarını sıfırla
-        campaign.totalAmount = 0;
-
-        // Çekimi gerçekleştir
-        payable(msg.sender).transfer(amount);
-
-        // Olayı yayınla
-        emit DonationWithdrawn(campaignId, msg.sender, amount);
+        emit CampaignDeleted(campaignId, msg.sender);
     }
 
+    /**
+     * @dev Updates a campaign's title and description.
+     */
     function updateCampaign(
         uint campaignId,
         string memory newTitle,
-        string memory newDescription
+        string memory newDescription,
+        uint newGoalAmount
     ) public {
-        Campaign storage campaign = campaigns[campaignId];
+        Campaign storage campaign = _campaigns[campaignId];
         if (campaign.id == 0) revert CampaignNotFound(campaignId);
         if (campaign.creator != msg.sender)
             revert Unauthorized(
@@ -220,13 +218,74 @@ function getMyCampaigns(address _address) public view returns (Campaign[] memory
 
         campaign.title = newTitle;
         campaign.description = newDescription;
+        campaign.goalAmount = newGoalAmount;
 
         emit CampaignUpdated(campaignId, newTitle, newDescription);
     }
 
-    function updateReputation(address user, uint newReputation) public {
-        reputations[user] = newReputation;
+    // **Donation Management Functions**
+    /**
+     * @dev Allows users to donate to a specific campaign.
+     */
+    function donation(uint campaignId) public payable {
+        Campaign storage campaign = _campaigns[campaignId];
+        if (campaign.id == 0) revert CampaignNotFound(campaignId);
 
-        emit ReputationUpdated(user, newReputation);
+        campaign.totalAmount += msg.value;
+        _donors[campaignId].push(msg.sender);
+        _donorAmounts[campaignId][msg.sender] += msg.value;
+
+        emit DonationReceived(campaignId, msg.sender, msg.value);
+
+        // Update reputation after donation
+        updateReputation(msg.sender, msg.value);
+    }
+
+    /**
+     * @dev Updates the reputation score for a user based on their donation amount.
+     * Reputation scores are awarded based on predefined donation ranges.
+     */
+    function updateReputation(address user, uint donationAmount) internal {
+        uint newReputation;
+
+        if (donationAmount < 0.001 ether) {
+            newReputation = 1; // < 3,70$ eth'ın 3700 old an
+        } else if (donationAmount < 0.003 ether) {
+            newReputation = 2; // < 11$
+        } else if (donationAmount < 0.01 ether) {
+            newReputation = 3; // < 37$
+        } else if (donationAmount < 0.03 ether) {
+            newReputation = 4; // < 111$
+        } else {
+            newReputation = 5;
+        }
+
+        _reputations[user] += newReputation;
+
+        emit ReputationUpdated(user, _reputations[user]);
+    }
+
+    /**
+     * @dev Allows the campaign creator to withdraw donations.
+     */
+    function withdrawDonations(uint campaignId) public {
+        Campaign storage campaign = _campaigns[campaignId];
+
+        if (campaign.id == 0) revert CampaignNotFound(campaignId);
+        require(
+            campaign.creator == msg.sender,
+            "Only campaign owner can withdraw donations"
+        );
+
+        uint amount = campaign.totalAmount;
+        require(
+            amount >= 0.1 ether,
+            "The minimum amount that can be withdrawn is 0.1 ether"
+        );
+
+        campaign.totalAmount = 0;
+        payable(msg.sender).transfer(amount);
+
+        emit DonationWithdrawn(campaignId, msg.sender, amount);
     }
 }
