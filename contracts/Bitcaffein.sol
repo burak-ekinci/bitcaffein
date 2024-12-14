@@ -78,6 +78,19 @@ contract BitCaffein {
     /**
      * @dev Test function for deployment verification.
      */
+    function returnCounter(uint counter) public view returns (uint) {
+        return counter;
+    }
+    /**
+     * @dev Test function for deployment verification.
+     */
+    function getCampaignCounter() public view returns (uint) {
+        return campaignCounter;
+    }
+
+    /**
+     * @dev Test function for deployment verification.
+     */
     function test() public pure returns (string memory) {
         return "hello Burak";
     }
@@ -148,31 +161,41 @@ contract BitCaffein {
      * @dev Creates a new campaign with the provided details.
      */
     function createCampaign(
-        string memory title,
-        string memory description,
-        string memory creatorName,
-        string memory creatorJob,
-        uint goalAmount
-    ) public {
-        campaignCounter++;
-        Campaign memory newCampaign = Campaign({
-            id: campaignCounter,
-            creator: msg.sender,
-            creatorName: creatorName,
-            creatorJob: creatorJob,
-            title: title,
-            description: description,
-            totalAmount: 0,
-            goalAmount: goalAmount,
-            startTime: block.timestamp
-        });
+    string memory title,
+    string memory description,
+    string memory creatorName,
+    string memory creatorJob,
+    uint goalAmount
+) public  returns (uint) {
+    require(bytes(title).length > 0, "Title cannot be empty");
+    require(bytes(description).length > 0, "Description cannot be empty");
+    require(bytes(creatorName).length > 0, "Creator name cannot be empty");
+    require(bytes(creatorJob).length > 0, "Creator job cannot be empty");
+    require(goalAmount > 0, "Goal amount must be greater than zero");
 
-        _campaigns[campaignCounter] = newCampaign;
-        addCampaignId(campaignCounter);
-        _allCampaigns.push(newCampaign);
+    campaignCounter++;
 
-        emit CampaignCreated(campaignCounter, msg.sender, title, goalAmount);
-    }
+    Campaign memory newCampaign = Campaign({
+        id: campaignCounter,
+        creator: msg.sender,
+        creatorName: creatorName,
+        creatorJob: creatorJob,
+        title: title,
+        description: description,
+        totalAmount: 0,
+        goalAmount: goalAmount,
+        startTime: block.timestamp
+    });
+
+    _campaigns[campaignCounter] = newCampaign;
+    addCampaignId(campaignCounter);
+    _allCampaigns.push(newCampaign);
+
+    emit CampaignCreated(campaignCounter, msg.sender, title, goalAmount);
+
+    return returnCounter(campaignCounter);
+}
+
 
     /**
      * @dev Deletes a campaign by its ID.
@@ -289,3 +312,4 @@ contract BitCaffein {
         emit DonationWithdrawn(campaignId, msg.sender, amount);
     }
 }
+

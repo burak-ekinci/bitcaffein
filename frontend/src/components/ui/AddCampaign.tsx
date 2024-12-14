@@ -5,6 +5,8 @@ import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { LoadingButton } from "./index";
 import axios from "axios";
+import { Contract } from "ethers";
+import { configDotenv } from "dotenv";
 
 const AddCampaign = () => {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -68,9 +70,9 @@ const AddCampaign = () => {
       const goalAmountInWei = ethers
         .parseEther(goalAmountRef.current.value)
         .toString();
-
-      // Kontrata yapılan çağrı
-      const contractPromise = contract.createCampaign(
+      console.log("BEFORE -->", await contract.getCampaignCounter());
+      // Kontrata yapılan çağrıdan `campaignCounter` değerini al
+      const createCampaign = await contract.createCampaign(
         titleRef.current.value,
         descRef.current.value,
         creatorNameRef.current.value,
@@ -78,10 +80,20 @@ const AddCampaign = () => {
         goalAmountInWei
       );
 
-      // Backend'e fotoğrafları gönderme işlemi
-      const apiPromise = axios.post(
-        `${import.meta.env.VITE_KEY_API_CONNECTION_STRING}/campaign`,
+      console.log("AFTER -->", await contract.getCampaignCounter());
+      if (!createCampaign) {
+        throw new Error(
+          "Campaign counter could not be retrieved from the contract."
+        );
+      }
+
+      const campaignCounter = await contract.getCampaignCounter();
+
+      const apiResponse = await axios.post(
+        `${import.meta.env.VITE_KEY_API_CONNECTION_STRING}/campaign/add`,
         {
+          campaignId: campaignCounter.toString(),
+          name: titleRef.current.value,
           photos,
         },
         {
@@ -90,30 +102,15 @@ const AddCampaign = () => {
           },
         }
       );
+      console.log("api log : ", apiResponse);
+      console.log("campaign counter: ", campaignCounter);
 
-      // Her iki işlemi paralel olarak bekle
-      const results = await Promise.allSettled([contractPromise, apiPromise]);
-
-      // Sonuçları kontrol et
-      const contractResult = results[0];
-      const apiResult = results[1];
-
-      if (contractResult.status === "fulfilled") {
-        toast.success("Contract call successful!");
-      } else {
-        console.error("Contract error:", contractResult.reason);
-        toast.error("Contract call failed.");
-      }
-
-      if (apiResult.status === "fulfilled") {
-        toast.success("API call successful!");
-      } else {
-        console.error("API error:", apiResult.reason);
-        toast.error("API call failed.");
-      }
+      // Başarılı bildirim
+      toast.success("Campaign created successfully!");
+      console.log("API Response:", apiResponse.data);
     } catch (error) {
-      console.error("Unexpected error:", error);
-      toast.error("An unexpected error occurred.");
+      console.error("Error occurred:", error);
+      toast.error("An error occurred during campaign creation.");
     } finally {
       setLoading(false);
       navigate("/buycoffee");
@@ -125,6 +122,14 @@ const AddCampaign = () => {
       onSubmit={createCampaign}
       className="container mt-4 p-4 shadow rounded bg-light"
     >
+      <button
+        onClick={async () => {
+          console.log(await contract.getCampaignCounter());
+        }}
+        className="btn"
+      >
+        campaigncounter
+      </button>
       <h3 className="text-center mb-4">Create Campaign</h3>
 
       {/* Title and Goal Amount */}

@@ -5,7 +5,7 @@ router.post("/test",(req,res) => {res.json({"feedback": "hello", "reqDeNevar": r
 
 router.post("/add", campaignController.addCampaign)
 
-router.post("/get/:id", campaignController.getCampaign)
+router.get("/get/:id", campaignController.getCampaign)
 
 router.post("/delete",  (req,res) => {res.json({"feedback": "hello", "reqDeNevar": req.body})})
 

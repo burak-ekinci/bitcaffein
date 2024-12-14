@@ -10,7 +10,7 @@ type UseContractResponse = {
     creatorName: string,
     creatorJob: string,
     goalAmount: string
-  ) => Promise<void>;
+  ) => Promise<string>;
   getMyCampaigns: (user: string) => Promise<any[]>;
   getCampaignById: (id: string) => Promise<any>;
   deleteCampaign: (id: bigint) => Promise<void>;
@@ -18,6 +18,7 @@ type UseContractResponse = {
   donation: (campaignId: number, amount: string) => Promise<void>;
   getAllCampaigns: () => Promise<any[]>;
   test: () => Promise<string>;
+  getCampaignCounter: () => Promise<string>;
 };
 
 type ContractHookFactory = CryptoHookFactory<Contract, UseContractResponse>;
@@ -56,6 +57,7 @@ export const hookFactory: ContractHookFactory =
         goalAmount
       );
       await tx.wait();
+      return tx;
     };
     const getAllCampaigns = async () => {
       if (!contract) throw new Error("Contract is not initialized.");
@@ -66,6 +68,12 @@ export const hookFactory: ContractHookFactory =
       if (!contract) throw new Error("Contract is not initialized.");
       // Get the campaigns of user
       const campaigns = await contract.getMyCampaigns(user);
+      return campaigns;
+    };
+    const getCampaignCounter = async () => {
+      if (!contract) throw new Error("Contract is not initialized.");
+      // Get the campaigns of user
+      const campaigns = await contract.getCampaignCounter();
       return campaigns;
     };
 
@@ -152,6 +160,7 @@ export const hookFactory: ContractHookFactory =
       deleteCampaign,
       withdrawDonations,
       test,
+      getCampaignCounter,
       isLoading: !data && !mutate && !isValidating,
     };
   };

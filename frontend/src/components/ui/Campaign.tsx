@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { LoadingButton } from "./index";
 import { ethers, parseEther } from "ethers";
+import axios from "axios";
 
 type Campaign = {
   id: number;
@@ -20,6 +21,7 @@ const Campaign = (): JSX.Element => {
   const { id } = useParams();
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [donationAmount, setDonationAmount] = useState<string>("0");
+  const [photos, setPhotos] = useState<string[]>([]);
   const { contract } = useContract();
   const { account } = useAccount();
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,6 +30,11 @@ const Campaign = (): JSX.Element => {
     setLoading(true);
     try {
       const campaignData = await contract!.getCampaignById(id as string);
+      // Fotoğrafları al
+      const photoResponse = await axios.get(
+        `${import.meta.env.VITE_KEY_API_CONNECTION_STRING}/campaign/get/${id}`
+      );
+      setPhotos(photoResponse.data.campaign.photos || []);
       setCampaign(campaignData);
     } catch (error) {
       console.error("Error fetching campaign:", error);
@@ -81,7 +88,7 @@ const Campaign = (): JSX.Element => {
   };
   return (
     <>
-      <div id="bg" className="container card bg col-md-9 mt-3">
+      <div id="bg" className="container card bg col-md-9 mt-3 ">
         <div className="row g-0 p-3">
           {/* Card Left Side */}
           <div className="col-md-4 d-flex align-items-center justify-content-center">
@@ -243,6 +250,18 @@ const Campaign = (): JSX.Element => {
               </div>
             </div>
           </div>
+        </div>
+        {/* Fotoğraflar */}
+        <div className="row mt-4">
+          {photos.map((photo, index) => (
+            <div key={index} className="col-md-3 mb-3">
+              <img
+                src={photo}
+                alt={`Campaign Photo ${index + 1}`}
+                className="img-fluid rounded"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </>

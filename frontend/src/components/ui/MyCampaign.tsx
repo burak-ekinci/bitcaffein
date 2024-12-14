@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useAccount, useContract } from "../hooks/web3";
+import axios from "axios";
+import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { LoadingButton } from "./index";
-import { ethers, parseEther } from "ethers";
+import { useAccount, useContract } from "../hooks/web3";
+import { useNavigate, useParams } from "react-router-dom";
 
 type Campaign = {
   id: number;
@@ -25,6 +25,7 @@ const MyCampaign = (): JSX.Element => {
   const { account } = useAccount();
 
   const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [donationAmount, setDonationAmount] = useState<string>("0");
   const [loading, setLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -33,14 +34,25 @@ const MyCampaign = (): JSX.Element => {
     setLoading(true);
     try {
       const campaignData = await contract!.getCampaignById(id as string);
+      if (campaignData.length == 0) {
+        toast.info("There is no campaign");
+        navigate("/");
+        return;
+      }
       if (campaignData.creator != account.data) {
         toast.warning("Unauthorized!");
         navigate("/buycoffee");
       }
       setCampaign(campaignData);
+
+      // Fotoğrafları al
+      const photoResponse = await axios.get(
+        `${import.meta.env.VITE_KEY_API_CONNECTION_STRING}/campaign/get/${id}`
+      );
+      setPhotos(photoResponse.data.campaign.photos || []);
     } catch (error) {
-      console.error("Error fetching campaign:", error);
-      toast.error("Failed to load campaign details.");
+      console.error("Error fetching campaign or photos:", error);
+      toast.error("Failed to load campaign details or photos.");
     } finally {
       setLoading(false);
     }
@@ -51,12 +63,11 @@ const MyCampaign = (): JSX.Element => {
       toast.error("Campaign ID not found.");
       return;
     }
-    console.log("id --->>", ethers.toBigInt(campaign!.id.toString()));
     try {
       setLoading(true);
       await contract!.deleteCampaign(ethers.toBigInt(campaign!.id));
       toast.success("Campaign deleted successfully!");
-      setCampaign(null); // Kampanyayı null yaparak kullanıcıyı boş bir ekrana yönlendiriyoruz.
+      setCampaign(null);
       navigate("/mycampaigns");
     } catch (error: any) {
       console.error("Error during campaign deletion:", error);
@@ -71,7 +82,7 @@ const MyCampaign = (): JSX.Element => {
       setLoading(true);
       await contract!.withdrawDonations(Number(id));
       toast.success("Donations withdrawn successfully!");
-      await getCampaign(); // Kampanya verilerini güncelle
+      await getCampaign();
     } catch (error: any) {
       toast.error(error.message || "Failed to withdraw donations.");
     } finally {
@@ -79,9 +90,10 @@ const MyCampaign = (): JSX.Element => {
     }
   };
 
-  //   useEffect(() => {
-  //     getCampaign();
-  //   }, [id]);
+  // useEffect ile veriyi sayfa yüklendiğinde çek
+  useEffect(() => {
+    getCampaign();
+  }, [id]);
 
   if (!campaign) {
     return (
@@ -103,8 +115,6 @@ const MyCampaign = (): JSX.Element => {
       <div id="bg" className="container card bg col-md-9 mt-4">
         <div className="row g-0 p-3">
           {/* Delete Campaign */}
-
-          {/* Card Left Side */}
           <div className="col-md-4 d-flex align-items-center justify-content-center">
             <button
               style={{
@@ -120,7 +130,6 @@ const MyCampaign = (): JSX.Element => {
             >
               <i className="bi bi-trash3 fs-4 text-secondary p-2"></i>
             </button>
-
             <img
               width={50}
               src="/pp.png"
@@ -192,6 +201,18 @@ const MyCampaign = (): JSX.Element => {
               </button>
             </div>
           </div>
+        </div>
+        {/* Fotoğraflar */}
+        <div className="row mt-4">
+          {photos.map((photo, index) => (
+            <div key={index} className="col-md-3 mb-3">
+              <img
+                src={photo}
+                alt={`Campaign Photo ${index + 1}`}
+                className="img-fluid rounded"
+              />
+            </div>
+          ))}
         </div>
       </div>
       {/* Modal */}

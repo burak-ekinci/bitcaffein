@@ -7,10 +7,13 @@ const campaignRouter = require("./routers/campaign_router")
 const app = express()
 
 app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({limit: "10mb"}))
+app.use(express.urlencoded({limit: '10mb', extended: true }));
 
 app.use("/campaign", campaignRouter)
+app.use("/", (req,res) => {
+    res.send("hlow")
+})
 
 
 app.listen(process.env.CONNECTION_PORT, () => {

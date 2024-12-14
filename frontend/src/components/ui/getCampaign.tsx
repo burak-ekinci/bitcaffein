@@ -26,8 +26,15 @@ const GetCampaign: React.FC<Props> = ({ functionType }) => {
 
   const navigate = useNavigate();
 
+  // console.log("contract bu", contract);
+  if (contract.data == undefined) {
+    return (
+      <div className="spinner-border text-warning" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    );
+  }
   // useEffect(() => {
-
   //   getAllCampaign();
   // }, []);
 
@@ -44,7 +51,7 @@ const GetCampaign: React.FC<Props> = ({ functionType }) => {
       console.log(tx);
       console.log(tx[0]);
     } catch (error) {
-      toast.success("Contract is not initialized.");
+      toast.error("Contract is not initialized");
     }
   };
 
@@ -52,6 +59,11 @@ const GetCampaign: React.FC<Props> = ({ functionType }) => {
   const getMyCampaign = async () => {
     try {
       const tx = await contract!.getMyCampaigns(account.data as string);
+      if (tx.length == 0) {
+        toast.info("There is no campaign");
+        navigate("/");
+        return;
+      }
       setCampaigns(tx);
       console.log("mycampaigns: ", tx);
       console.log(tx[0]);
