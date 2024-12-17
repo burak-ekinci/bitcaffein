@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-# Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
-```
-=======
 # BitCaffein
 ## Empowering creators with decentralized donations on Ethereum.
 BitCaffein is a decentralized platform inspired by buymeacoffee.com, built on the Ethereum blockchain. It enables creators to receive ETH donations transparently and securely, leveraging blockchain technology for privacy and efficiency.
@@ -56,4 +41,4 @@ Campaign creators can withdraw received donations to their Ethereum address at a
    function updateReputation(address user, uint newReputation) public
 ```
 A reputation system tracks user contributions and activity, enhancing transparency and trust.
->>>>>>> a89fbbf5966e719d991721b05f38980066055bf6
+
